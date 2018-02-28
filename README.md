@@ -1,9 +1,6 @@
 # nextbus
 
-A library for Dart developers.
-
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+A dart library for getting bus data from the Nextbus API.
 
 ## Usage
 
@@ -12,11 +9,13 @@ A simple usage example:
     import 'package:nextbus/nextbus.dart';
 
     main() {
-      var awesome = new Awesome();
+      var scott_h_bus = await Predictions.request_stop_predictions("rutgers", "h", "scott");
+	  var minutes = scott_h_bus.predictions.first.minutes;
+	  print("next h arriving at scott hall in ${minutes} minutes");
     }
 
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: http://example.com/issues/replaceme
+[tracker]: https://github.com/boustrophedon/nextbus-dart/issues
