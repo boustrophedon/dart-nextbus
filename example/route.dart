@@ -17,13 +17,13 @@ void printRoute(Route route) {
   }
 
   print("");
-  print("Extents of path: ${route.extents}");
+  print("Extents of stops: ${route.extents}");
   print("Smallest latitude of paths: ${left}");
 }
 
 main() {
   var route = Route
-      .request_route('rutgers', 'ee', true)
+      .request_route('rutgers', 'ee', wantPaths: true)
       .then(printRoute)
       .catchError(
           (e) => print("${e.runtimeType} ${e.toString()}\n${e.stackTrace}"));

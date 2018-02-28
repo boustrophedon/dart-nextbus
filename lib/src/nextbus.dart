@@ -129,7 +129,7 @@ class Route {
   /// data, or you know the agency has a lot of bus routes. In most cases it
   /// will save time and data to request all routes with `request_routes`.
   static Future<Route> request_route(String agencyTag, String routeTag,
-      [bool wantPaths = false]) {
+      {bool wantPaths = false}) {
     var params = {'a': agencyTag, 'r': routeTag};
     if (!wantPaths) {
       // It doesn't actually matter what the parameter is, the nextbus
@@ -143,7 +143,7 @@ class Route {
   /// Request the route data for all routes operated by the agency with tag
   /// `agencyTag`.
   static Future<List<Route>> request_routes(String agencyTag,
-      [bool wantPaths = false]) {
+      {bool wantPaths = false}) {
     var params = {'a': agencyTag};
     if (!wantPaths) {
       // It doesn't actually matter what the parameter is, the nextbus
