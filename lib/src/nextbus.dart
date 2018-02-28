@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
@@ -43,7 +44,7 @@ class Agency {
 
 	Agency(this.tag, this.title, this.shortTitle, this.regionTitle);
 
-	static Future<List<Agency>> request_agencies() async {
+	static Future<List<Agency>> request_agencies() {
 		var uri = _nextbus_command('agencyList');
 
 		return http.get(uri).then((r) => parse_agencies(r.body));
@@ -60,7 +61,7 @@ class RouteList {
 
 	RouteList(this.routes);
 
-	static Future<RouteList> request_route_list(String agency) async {
+	static Future<RouteList> request_route_list(String agency) {
 		var uri = _nextbus_command('routeList', {'a': agency});
 
 		return http.get(uri).then((r) => parse_route_list(r.body));
@@ -142,7 +143,6 @@ class Route {
 	@override
 	int get hashCode => tag.hashCode;
 }
-
 class Stop {
 	final String tag;
 	final String title;
@@ -182,7 +182,17 @@ class Predictions {
 			.toList();
 		params['stops'] = stopsStrings;
 		var uri = _nextbus_command('predictionsForMultiStops', params);
-		return http.get(uri).then((r) => parse_predictions(r.body));
+
+		return http.get(uri).then((r) {
+        var preds = parse_predictions(r.body);
+        // the predictions are returned out of order
+        // so we put them in a hash map, and then get them in the order of the
+        // route passed in to the call
+        HashMap<String, Predictions> pmap = new HashMap.fromIterable(preds, key: (p) => p.stopTag, value: (p)=> p);
+        return route.stops
+          .map((stop) => pmap[stop.tag])
+          .toList();
+      });
 	}
 
 	/// Returns predictions for all buses on the route with the given
