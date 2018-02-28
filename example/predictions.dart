@@ -16,12 +16,13 @@ void printPredictions(List<Predictions> route_preds) {
 }
 
 main() async {
-  var route = await Route.request_route('rutgers', 'h', true).catchError(
-      (e) => print("${e.runtimeType} ${e.toString()}\n${e.stackTrace}"));
+  try {
+    var route = await Route.request_route('rutgers', 'h', wantPaths: true);
 
-  var predictions = Predictions
-      .request_route_predictions('rutgers', route)
-      .then(printPredictions)
-      .catchError(
-          (e) => print("${e.runtimeType} ${e.toString()}\n${e.stackTrace}"));
+    var predictions = Predictions
+        .request_route_predictions('rutgers', route)
+        .then(printPredictions);
+  } catch (e) {
+    print("${e.runtimeType} ${e.toString()}");
+  }
 }
